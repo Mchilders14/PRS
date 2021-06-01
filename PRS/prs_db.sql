@@ -88,7 +88,8 @@ INSERT INTO User VALUES
 (9, 'lmendenhall', 'lmfoodsource22', 'Lance', 'Mendenhall', '859-468-7055', 'mendenhalll@gmail.com', 0, 1),
 (10, 'rwalker', 'rskywalker', 'Rose', 'Walker', '317-258-0152', 'rosiewalker@icloud.com', 0, 1),
 (11, 'hchilders', 'harrys1229', 'Hannah', 'Childers', '513-609-6973', 'hchilders@gmail.com', 0, 1),
-(12, 'emilyc11', 'ec1997m', 'Emily', 'Childers', '513-609-5847', 'emilyc1997@fuse.net', 0, 1);
+(12, 'emilyc11', 'ec1997m', 'Emily', 'Childers', '513-609-5847', 'emilyc1997@fuse.net', 0, 1),
+(13, 'billc6230', 'sc1960', 'William', 'Childers', '513-609-4432', 'bill6230@fuse.net', 0, 1);
 
 
 -- insert some rows into the Vendor table
