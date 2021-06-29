@@ -65,5 +65,12 @@ public class UserController {
 		}
 		return user;
 	}
+	
+	@PostMapping("/login")
+	public Optional<User> userLogin(@RequestBody User user){
+		
+		return userRepo.findAllByUsernameAndPassword(user.getUsername(), user.getPassword());
+		
+	}
 
 }
