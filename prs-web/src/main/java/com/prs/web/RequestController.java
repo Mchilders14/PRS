@@ -1,5 +1,6 @@
 package com.prs.web;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class RequestController {
 
 	@PostMapping("/")
 	public Request add(@RequestBody Request request) {
+		request.setStatus("New");	// Set default Request status to New
+		request.setSubmittedDate(LocalDateTime.now());	// Using LocalDate Class to get Current Date && Time
 		return requestRepo.save(request);
 	}
 

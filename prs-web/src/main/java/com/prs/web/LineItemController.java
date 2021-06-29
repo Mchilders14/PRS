@@ -1,5 +1,6 @@
 package com.prs.web;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,12 @@ public class LineItemController {
 	@GetMapping("/{id}")
 	public Optional<LineItem> get(@PathVariable int id) {
 		return lineItemRepo.findById(id);
+	}
+	
+	// Get all LineItem(s) by RequestID
+	@GetMapping("/lines-for-pr/{id}")
+	public List<LineItem> getByRequestId(@PathVariable int id) {	// Returns List of type <LineItem>
+		return lineItemRepo.findAllByRequestId(id);
 	}
 
 	@PostMapping("/")
