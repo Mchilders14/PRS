@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.prs.business.LineItem;
+import com.prs.business.Request;
 import com.prs.db.LineItemRepo;
+import com.prs.db.RequestRepo;
 
 
 @CrossOrigin
@@ -20,6 +22,9 @@ public class LineItemController {
 
 	@Autowired
 	private LineItemRepo lineItemRepo;
+	
+	@Autowired
+	private RequestRepo requestRepo;
 
 	@GetMapping("/")
 	public Iterable<LineItem> getAll() {
@@ -39,12 +44,30 @@ public class LineItemController {
 
 	@PostMapping("/")
 	public LineItem add(@RequestBody LineItem lineItem) {
-		return lineItemRepo.save(lineItem);
+		LineItem li = lineItemRepo.save(lineItem);
+		
+		if (recalculateTotal(lineItem.getRequest())) {
+			// successful recalculate
+		}
+		else {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, 
+					"Exception caught during movieCollection post.");
+		}
+		return li;
 	}
 
 	@PutMapping("/")
 	public LineItem update(@RequestBody LineItem lineItem) {
-		return lineItemRepo.save(lineItem);
+		LineItem li = lineItemRepo.save(lineItem);
+		
+		if (recalculateTotal(lineItem.getRequest())) {
+			// successful recalculate
+		}
+		else {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, 
+					"Exception caught during movieCollection put.");
+		}
+		return li;
 	}
 
 	@DeleteMapping("/{id}")
@@ -53,6 +76,9 @@ public class LineItemController {
 		if (lineItem.isPresent()) {
 			try {
 				lineItemRepo.deleteById(id);
+				if (!recalculateTotal(lineItem.get().getRequest())) {
+					throw new Exception("Issue recalculating collectionValue on delete.");
+				}
 			}
 			catch (DataIntegrityViolationException dive) {
 				// catch dive when movie exists as fk on another table
@@ -71,6 +97,32 @@ public class LineItemController {
 			System.err.println("LineItem delete error - no lineItem found for id:"+id);
 		}
 		return lineItem;
+	}
+	
+	private boolean recalculateTotal(Request request) {
+		boolean success = false;
+		
+		try {
+			List<LineItem> lineItems = lineItemRepo.findAllByRequestId(request.getId());
+			
+			double requestTotal = 0.0;
+			
+			for(LineItem li : lineItems) {
+				requestTotal += (li.getProduct().getPrice() * li.getQuantity());
+			}
+			
+			// Set new total in the request
+			request.setTotal(requestTotal);
+			
+			requestRepo.save(request);
+			success = true;
+			
+		} catch (Exception e) {
+			System.err.println("Error saving new collection value.");
+			e.printStackTrace();
+		}
+		
+		return success;
 	}
 
 }
