@@ -1,6 +1,7 @@
 package com.prs.web;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.prs.business.Request;
+import com.prs.business.User;
 import com.prs.db.RequestRepo;
+import com.prs.db.UserRepo;
 
 
 @CrossOrigin
@@ -20,6 +23,9 @@ public class RequestController {
 
 	@Autowired
 	private RequestRepo requestRepo;
+	
+	@Autowired
+	private UserRepo userRepo;
 
 	@GetMapping("/")
 	public Iterable<Request> getAll() {
@@ -29,6 +35,12 @@ public class RequestController {
 	@GetMapping("/{id}")
 	public Optional<Request> get(@PathVariable int id) {
 		return requestRepo.findById(id);
+	}
+	
+	// show requests in review status and not assigned to logged in user
+	@GetMapping("/list-review/{id}")
+	public List<Request> getAllReview(@PathVariable int id) {
+		return requestRepo.findAllByUserIdNotAndStatus(id, "Review");
 	}
 
 	@PostMapping("/")
@@ -40,6 +52,25 @@ public class RequestController {
 
 	@PutMapping("/")
 	public Request update(@RequestBody Request request) {
+		return requestRepo.save(request);
+	}
+	
+	@PutMapping("/submit-review")
+	public Request submitReview(@RequestBody Request request) {
+		request.setStatus(request.getTotal() <= 50 ? "Approved" : "Review");
+		request.setSubmittedDate(LocalDateTime.now());	// Using LocalDate Class to get Current Date && Time
+		return requestRepo.save(request);
+	}
+	
+	@PutMapping("/approve")
+	public Request approve(@RequestBody Request request) {
+		request.setStatus("Approved");
+		return requestRepo.save(request);
+	}
+	
+	@PutMapping("/reject")
+	public Request reject(@RequestBody Request request) {
+		request.setStatus("Rejected");
 		return requestRepo.save(request);
 	}
 
