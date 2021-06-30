@@ -14,7 +14,7 @@ import com.prs.db.UserRepo;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
 	@Autowired
