@@ -13,6 +13,7 @@ public class Vendor {
 	private String name;
 	private String address;
 	private String city;
+	private String state;
 	private String zip;
 	private String phone;
 	private String email;
@@ -21,7 +22,7 @@ public class Vendor {
 		// Default empty constructor
 	}
 
-	public Vendor(int id, String code, String name, String address, String city, String zip, String phone,
+	public Vendor(int id, String code, String name, String address, String city, String state, String zip, String phone,
 			String email) {
 		super();
 		this.id = id;
@@ -29,17 +30,19 @@ public class Vendor {
 		this.name = name;
 		this.address = address;
 		this.city = city;
+		this.state = state;
 		this.zip = zip;
 		this.phone = phone;
 		this.email = email;
 	}
 
-	public Vendor(String code, String name, String address, String city, String zip, String phone, String email) {
+	public Vendor(String code, String name, String address, String city, String state, String zip, String phone, String email) {
 		super();
 		this.code = code;
 		this.name = name;
 		this.address = address;
 		this.city = city;
+		this.state = state;
 		this.zip = zip;
 		this.phone = phone;
 		this.email = email;
@@ -85,6 +88,10 @@ public class Vendor {
 		this.city = city;
 	}
 
+	public String getState() {return state;}
+
+	public void setState(String state) {this.state = state;}
+
 	public String getZip() {
 		return zip;
 	}
@@ -112,7 +119,7 @@ public class Vendor {
 	@Override
 	public String toString() {
 		return "Vendor [id=" + id + ", code=" + code + ", name=" + name + ", address=" + address + ", city=" + city
-				+ ", zip=" + zip + ", phone=" + phone + ", email=" + email + "]";
+				+ ", State=" + state +", zip=" + zip + ", phone=" + phone + ", email=" + email + "]";
 	}
 
 }
